@@ -1,5 +1,22 @@
 const Hotel = require('../models/hotelModel');
 
+// Super admin login
+const superAdminLogin = async (req, res) => {
+  const { username, password } = req.body;
+
+  // Fetch the hotel's login credentials from the database
+  try {
+    const hotel = await Hotel.findOne({ username, password });
+    if (!hotel) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    res.json({ message: 'Super admin logged in successfully', token: 'TOKEN_VALUE' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to log in' });
+  }
+};
+
 // Create a new hotel
 const createHotel = async (req, res) => {
   try {
@@ -91,5 +108,5 @@ const rejectHotel = async (req, res) => {
   }
 };
 
-module.exports = { createHotel, getHotels, updateHotel, deleteHotel, toggleHotel, approveHotel, rejectHotel };
+module.exports = { superAdminLogin, createHotel, getHotels, updateHotel, deleteHotel, toggleHotel, approveHotel, rejectHotel };
 
